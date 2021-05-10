@@ -19,7 +19,6 @@
 			{% endif %}{% endfor %}
 		</h4>
 		<ul style="display: none">
-
 			{% for page in site.pages %}{% if page.categories contains "Timeline" %}<li style="display: none"><a href="{% if site.baseurl == "" %}{{page.url}}{% elsif site.baseurl != "" %}/{{site.baseurl}}{{page.url}}
 		        {% endif %}">{{page.title}}</a></li>
 			{% endif %}{% endfor %}
