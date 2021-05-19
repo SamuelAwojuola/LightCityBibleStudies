@@ -688,6 +688,40 @@ td>div {
 }
 
 /**********************/
+#masterNote {
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(253, 253, 215, 0.822);
+  z-index: 99;
+}
+
+#closeMasterNote {
+  position: absolute;
+  right: 0;
+  z-index: 2;
+}
+
+#editMasterNote {
+  position: absolute;
+  right: 0;
+  top:25px;
+  z-index: 2;
+}
+
+#masterNote>div {
+  position: inherit;
+  padding: 10px;
+  height: calc(100% - 10vw);
+  top: 2.5vw;
+  left: 10vw;
+  right: 10vw;
+  background-color: rgba(255, 255, 255, 0.9);
+  width: calc(100% - 20vw);
+  box-shadow: #847e7f 10px 0 5px 0,
+    #847e7f -10px 0 5px 0;
+  overflow-y: auto;
+}
 
 #detailsKeyFacts {
   width: 95px;

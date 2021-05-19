@@ -1,7 +1,6 @@
 //PART OF THE HTML DOVUMNT TO SAVE
 //TO CREATE FILE TO SAVE
 function saveDynamicDataToFile() {
-
 	var saveText = `---
 layout: bibleStoryLineTEMPLATE
 title: "` + storyLineTableTitleHeader.innerHTML + `"
@@ -16,6 +15,7 @@ categories: Timeline
 		`</table>
 
 {% include BStL-masterTableEND.html %}
+ ` + masterNoteNote.innerHTML + `
 {% include BStL-detailsSection-Buttons.html %}
 
 	<div id="detailsSummary" class="scrollbar-custom">` +
