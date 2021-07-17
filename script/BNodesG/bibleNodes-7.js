@@ -20,6 +20,9 @@ var mouseDownForDraggingEnabled = 0;
 var mouseMoveForDraggingEnabled = 0;
 var nodeIdsAllAssigned = 0;
 
+var collisionDetectionOn = 0;
+var evaluatedNode;
+
 //Function to assign nodeId attribute and nodeId class to selected divNode
 function assignNodeID(elm, index) {
     elm.setAttribute('nodeId', ('node' + (index + 1)));
@@ -52,6 +55,9 @@ function deselectOnCanvasClick(e) {
 function nodeCanvasMouseDownFunction(e) {
     contextX = e.clientX;
     contextY = e.clientY;
+    evaluatedNode = this;
+    collisionSwitch();
+    if(collisionDetectionOn){currentNodeStartPosition(evaluatedNode);}//for getting the initial position of currentNode to return it to in case of collision
     aNodeHasBeenClicked = 1;
     //if this is the first time a nodeDiv is clicked or if the nodeCanvas was clicked, then 'youCanDrag  == 0'
     if (youCanDrag == 0) {
@@ -86,8 +92,8 @@ function mouseDownFunction(e) {
     contextX = e.clientX;
     contextY = e.clientY;
 
-    divX = e.clientX - currentNode.getBoundingClientRect().left + nodeCanvasX;
-    divY = e.clientY - currentNode.getBoundingClientRect().top + nodeCanvasY;
+    divX = e.clientX - currentNode.getBoundingClientRect().left;
+    divY = e.clientY - currentNode.getBoundingClientRect().top;
     SVGmouseDownFunction();
 }
 
@@ -96,8 +102,8 @@ function mouseMoveFunction(e) {
     mouseMoveForDraggingEnabled = 0;
 
     // take vertical and horizontal page scroll into consideration 
-    var horizontalScroll = (window.pageXOffset || document.documentElement.scrollLeft);
-    var verticalScroll = (window.pageYOffset || document.documentElement.scrollTop);
+    var horizontalScroll = (window.pageXOffset || document.documentElement.scrollLeft) - nodeCanvasContainer.getBoundingClientRect().left - nodeCanvas.getBoundingClientRect().left;
+    var verticalScroll = (window.pageYOffset || document.documentElement.scrollTop) + nodeCanvasContainer.getBoundingClientRect().top - nodeCanvas.getBoundingClientRect().top;
 
     var newX = e.clientX - divX + horizontalScroll + 'px';
     var newY = e.clientY - divY + verticalScroll + 'px';
@@ -106,9 +112,15 @@ function mouseMoveFunction(e) {
     currentNode.style.top = newY;
 
     SVGmouseMoveFunction();
+    createSet();
+    if(collisionDetectionOn){detectCollision();}
+    // joinCirclesWithPaths(arrangeArray(document.getElementsByClassName('divNode')), 'divNodes');
 }
 
 function mouseUpFunction(e) {
+    if(collisionDetectionOn){actIfCollision();}
+    createSet();
+
     //Connection to SVGmouseDownFunction & SVGmouseMoveFunction
     mouseDownForDraggingEnabled = 0;
     mouseMoveForDraggingEnabled = 0;
@@ -134,5 +146,19 @@ function navMenu() {
 
 	for (let i = 1; i <= webSiteNavLinks.length; i++) {
 		setTimeout(() => showHideSiteNav(webSiteNavLinks[i - 1]), 5 * i)
+	}
+}
+
+/* DARK MODE ON OFF */
+var darkModeButton = document.getElementById('darkModeButton');
+var documentBody = document.getElementsByTagName('body')[0];
+
+function darkModeOnOff() {
+	if (documentBody.classList.contains('darkmode')) {
+		documentBody.classList.remove('darkmode');
+		darkModeButton.innerHTML = 'D';
+	} else {
+		documentBody.classList.add('darkmode');
+		darkModeButton.innerHTML = 'L';
 	}
 }

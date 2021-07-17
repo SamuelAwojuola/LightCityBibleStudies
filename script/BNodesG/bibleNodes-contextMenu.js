@@ -28,11 +28,24 @@ function fadeInShow( el, speed ) {
     if(fadeOutTimeOut){
         clearTimeout(fadeOutTimeOut);
     }
-    
-    // el.style.display = 'block';
     var seconds = speed/1000;
+    el.style.display = '';
     el.style.transition = "opacity "+seconds+"s";
     el.style.opacity = 1;
+}
+function fadeInShow2( el, speed ) {
+    if(fadeOutTimeOut){
+        clearTimeout(fadeOutTimeOut);
+    }
+    
+    var seconds = speed/1000;
+    el.style.display = '';
+    
+    fadeInTimeOut = setTimeout(function() {
+        el.style.transition = "opacity "+seconds+"s";
+        el.style.opacity = 1;
+        fadeInTimeOut = null;
+    }, speed);
 }
 function fadeOutHide( el, speed ) {
     if(fadeInTimeOut){clearTimeout(fadeInTimeOut);}
@@ -102,9 +115,10 @@ showDivNodeToolTip = 0;
 var elementToCommentOn;
 var noteToDelete;
 
+//For Tooltip
 nodeCanvas.addEventListener('mouseover', function (ev) {
-    rClick_X = ev.clientX + nodeCanvasX + (window.pageXOffset || document.documentElement.scrollLeft);
-    rClick_Y = ev.clientY + nodeCanvasY + (window.pageYOffset || document.documentElement.scrollTop);
+    rClick_X = ev.clientX - nodeCanvasContainer.getBoundingClientRect().left - nodeCanvas.getBoundingClientRect().left + (window.pageXOffset || document.documentElement.scrollLeft);
+    rClick_Y = ev.clientY + nodeCanvasContainer.getBoundingClientRect().top - nodeCanvas.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop);
     
     ev = ev || window.event;
     var target = ev.target || ev.srcElement;
@@ -164,13 +178,14 @@ nodeCanvas.addEventListener('mouseover', function (ev) {
     }
 })
 nodeCanvas.addEventListener('mousemove', function (ev) {
-    rClick_X = ev.clientX + nodeCanvasX + (window.pageXOffset || document.documentElement.scrollLeft);
-    rClick_Y = ev.clientY + nodeCanvasY + (window.pageYOffset || document.documentElement.scrollTop);
-    
     ev = ev || window.event;
     var target = ev.target || ev.srcElement;
+ 
+    rClick_X = ev.clientX - nodeCanvasContainer.getBoundingClientRect().left - nodeCanvas.getBoundingClientRect().left + (window.pageXOffset || document.documentElement.scrollLeft);
+    rClick_Y = ev.clientY + nodeCanvasContainer.getBoundingClientRect().top - nodeCanvas.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop);
     
     if (target.tagName == 'path') {
+
         selectedPath = target;
         
         svgPathToolTip.style.left =rClick_X + 10 + 'px';
@@ -178,15 +193,6 @@ nodeCanvas.addEventListener('mousemove', function (ev) {
         svgPathToolTip.style.opacity = '1';
         svgPathToolTip.style.display = 'block';
     }
-    
-    // if (target.classList.contains('divNode')) {
-    //     selectedDivNode = target;
-        
-    //     divNodeToolTip.style.left = selectedDivNode.offsetLeft  + 'px';
-    //     divNodeToolTip.style.top = selectedDivNode.offsetTop + selectedDivNode.offsetHeight + 'px';
-    //     divNodeToolTip.style.opacity = '1';
-    //     divNodeToolTip.style.display = 'block';
-    // }
 })
 
 //This eventListner targets the children of nodeCanvas without attaching eventListners to the children directly
@@ -211,8 +217,8 @@ nodeCanvas.addEventListener('mousedown', function (ev) {
 })
 
 nodeCanvas.addEventListener('contextmenu', function (ev) {
-    rClick_X = ev.clientX + nodeCanvasX + (window.pageXOffset || document.documentElement.scrollLeft);
-    rClick_Y = ev.clientY + nodeCanvasY + (window.pageYOffset || document.documentElement.scrollTop);
+    rClick_X = ev.clientX - nodeCanvasContainer.getBoundingClientRect().left - nodeCanvas.getBoundingClientRect().left + (window.pageXOffset || document.documentElement.scrollLeft);
+    rClick_Y = ev.clientY + nodeCanvasContainer.getBoundingClientRect().top - nodeCanvas.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop);
 
     ev.preventDefault();//prevent default context menu
 
